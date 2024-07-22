@@ -12,6 +12,8 @@ libraryDependencies += jdbc
 libraryDependencies += ws
 libraryDependencies +=  "org.mybatis" % "mybatis" % "3.5.16"
 libraryDependencies +=    "mysql" % "mysql-connector-java" % "8.0.33"
+libraryDependencies += "org.flywaydb" % "flyway-core" % "10.15.2"
+libraryDependencies += "com.typesafe.play" %% "play-jdbc" % "2.9.4" // Core JDBC support
 // Adds additional packages into Twirl
 //TwirlKeys.templateImports += "com.example.controllers._"
 
