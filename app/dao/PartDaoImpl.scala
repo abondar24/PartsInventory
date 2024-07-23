@@ -32,7 +32,7 @@ class PartDaoImpl @Inject()(sqlSessionFactory: SqlSessionFactory) extends PartDa
     sqlSession.commit()
   }
 
-  override def listAll(offset: Int, limit: Int): Seq[Part] = {
+  override def findAll(offset: Int, limit: Int): Seq[Part] = {
    mapper.listParts(offset, limit)
   }
 }

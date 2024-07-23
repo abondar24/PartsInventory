@@ -10,7 +10,7 @@ trait PartDao {
   
   def findByName(name: String): Option[Part]
 
-  def listAll(offset: Int, limit: Int): Seq[Part]
+  def findAll(offset: Int, limit: Int): Seq[Part]
 
   def update(part: Part): Unit
 
