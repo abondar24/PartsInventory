@@ -1,7 +1,7 @@
 package dao
 
 import com.google.inject.Inject
-import model.Part
+import model.{Part, PartWithDetails}
 import org.apache.ibatis.session.SqlSessionFactory
 
 
@@ -33,6 +33,11 @@ class PartDaoImpl @Inject()(sqlSessionFactory: SqlSessionFactory) extends PartDa
   }
 
   override def findAll(offset: Int, limit: Int): Seq[Part] = {
-   mapper.listParts(offset, limit)
+    mapper.listParts(offset, limit)
   }
+
+  override def findWithDetails(id: Long): Option[PartWithDetails] = {
+    Option(mapper.selectPartWithDetails(id))
+  }
+
 }

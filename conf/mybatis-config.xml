@@ -2,8 +2,9 @@
 <configuration>
     <typeAliases>
         <typeAlias type="model.Part" alias="Part"/>
+        <typeAlias type="model.PartDetail" alias="PartDetail"/>
     </typeAliases>
-
+  
     <mappers>
         <package name="dao"/>
     </mappers>

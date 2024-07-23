@@ -1,7 +1,8 @@
 package dao
 
-import model.Part
+import model.{Part, PartWithDetails}
 import org.apache.ibatis.session.{SqlSession, SqlSessionFactory}
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
@@ -109,5 +110,23 @@ class PartDaoTest extends PlaySpec with MockitoSugar {
     partDao.findAll(0,1)
 
     verify(mapper).listParts(0,1)
+  }
+
+  "PartDaoImpl#findWithDetails" in {
+    val sessionFactory = mock[SqlSessionFactory]
+    val sqlSession = mock[SqlSession]
+    val mapper = mock[PartMapper]
+
+    when(sessionFactory.openSession()).thenReturn(sqlSession)
+    when(sqlSession.getMapper(classOf[PartMapper])).thenReturn(mapper)
+    val partDao = new PartDaoImpl(sessionFactory)
+
+    val part = Part(Option(1), "PartName", 10, 100.0)
+
+    when(mapper.selectPartWithDetails(1)).thenReturn(PartWithDetails(part.name,part.quantity,part.price,"test"))
+
+    partDao.findWithDetails(1)
+
+    verify(mapper).selectPartWithDetails(1)
   }
 }

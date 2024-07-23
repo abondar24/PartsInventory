@@ -1,6 +1,6 @@
 package dao
 
-import model.Part
+import model.{Part, PartWithDetails}
 
 trait PartDao {
 
@@ -11,6 +11,8 @@ trait PartDao {
   def findByName(name: String): Option[Part]
 
   def findAll(offset: Int, limit: Int): Seq[Part]
+  
+  def findWithDetails(id: Long): Option[PartWithDetails]
 
   def update(part: Part): Unit
 

@@ -1,7 +1,7 @@
 package dao
 
-import model.Part
-import org.apache.ibatis.annotations.{Delete, Insert, Mapper, Options, Param, Select, Update}
+import model.{Part, PartWithDetails}
+import org.apache.ibatis.annotations.*
 
 @Mapper
 trait PartMapper {
@@ -23,5 +23,10 @@ trait PartMapper {
   def deletePart(@Param("id") id: Long): Unit
 
   @Select(Array("SELECT * FROM PART OFFSET #{offset} LIMIT #{limit}"))
-  def listParts(@Param("offset" )offset: Int, @Param("limit") limit: Int): List[Part]
+  def listParts(@Param("offset") offset: Int, @Param("limit") limit: Int): List[Part]
+
+
+  @Select(Array("SELECT p.NAME,p.QUANTITY,p.PRICE,pd.DETAILS FROM PART p" +
+    " JOIN PART_DETAILS pd ON pd.PART_ID = p.ID  WHERE ID = #{id} "))
+  def selectPartWithDetails(id: Long): PartWithDetails
 }
