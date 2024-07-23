@@ -26,7 +26,8 @@ trait PartMapper {
   def listParts(@Param("offset") offset: Int, @Param("limit") limit: Int): List[Part]
 
 
-  @Select(Array("SELECT p.NAME,p.QUANTITY,p.PRICE,pd.DETAILS FROM PART p" +
-    " JOIN PART_DETAILS pd ON pd.PART_ID = p.ID  WHERE ID = #{id} "))
+  @Select(Array("SELECT p.NAME as partName,p.QUANTITY as partQuantity,p.PRICE as partPrice ,pd.DETAILS as partDetails" +
+    "FROM PART p" +
+    "LEFT JOIN PART_DETAILS pd ON pd.PART_ID = p.ID  WHERE ID = #{id} "))
   def selectPartWithDetails(id: Long): PartWithDetails
 }

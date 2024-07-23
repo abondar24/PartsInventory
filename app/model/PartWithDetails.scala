@@ -6,7 +6,7 @@ case class PartWithDetails (
                              name: String,
                              quantity: Int,
                              price: BigDecimal,
-                             details: String
+                             details: Seq[String]
                            )
 
 object PartWithDetails {

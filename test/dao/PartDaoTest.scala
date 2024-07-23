@@ -123,7 +123,7 @@ class PartDaoTest extends PlaySpec with MockitoSugar {
 
     val part = Part(Option(1), "PartName", 10, 100.0)
 
-    when(mapper.selectPartWithDetails(1)).thenReturn(PartWithDetails(part.name,part.quantity,part.price,"test"))
+    when(mapper.selectPartWithDetails(1)).thenReturn(PartWithDetails(part.name,part.quantity,part.price,List("test")))
 
     partDao.findWithDetails(1)
 
