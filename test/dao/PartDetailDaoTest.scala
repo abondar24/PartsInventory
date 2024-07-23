@@ -54,11 +54,11 @@ class PartDetailDaoTest extends PlaySpec with MockitoSugar{
     val partDetailDao = new PartDetailDaoImpl(sessionFactory)
 
     val partDetail = PartDetail(Option(1), 1, "PartName")
-    when(mapper.findDetail(1)).thenReturn(partDetail)
+    when(mapper.findDetail(partDetail.id.get,0,1)).thenReturn(List(partDetail))
 
-    partDetailDao.find(partDetail.id.get)
+    partDetailDao.find(partDetail.id.get,0,1)
 
-    verify(mapper).findDetail(partDetail.id.get)
+    verify(mapper).findDetail(partDetail.id.get,0,1)
   }
 
 }

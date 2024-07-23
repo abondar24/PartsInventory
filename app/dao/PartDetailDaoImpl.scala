@@ -19,11 +19,9 @@ class PartDetailDaoImpl @Inject()(sqlSessionFactory: SqlSessionFactory) extends 
     sqlSession.commit()
   }
 
-  override def find(id: Long): Option[PartDetail] = {
-    Option(mapper.findDetail(id))
+  override def find(partId: Long, offset: Int, limit: Int): Seq[PartDetail] = {
+    mapper.findDetail(partId,offset,limit)
   }
-  
-
 
 
 }

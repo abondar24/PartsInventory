@@ -8,6 +8,6 @@ trait PartDetailDao {
   
   def update(description: String): Unit
   
-  def find(id: Long): Option[PartDetail]
+  def find(partId: Long, offset: Int, limit: Int): Seq[PartDetail]
   
 }
