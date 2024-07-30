@@ -1,0 +1,20 @@
+# Create a new part
+POST   /parts            controller.PartController.create()
+
+# Find part by ID
+GET    /parts/:id         controller.PartController.findById(id: Long)
+
+# Find part by name
+GET    /parts/name/:name  controller.PartController.findByName(name: String)
+
+# Find all parts with pagination
+GET    /parts?offset=:offset&limit=:limit controller.PartController.findAll()
+
+# Find details of a part by part ID
+GET    /parts/:id/details?offset=:offset&limit=:limit controller.PartController.findPartDetails(id: Long)
+
+# Update a part with optional details
+PATCH    /parts/:id             controller.PartController.update(id: Long)
+
+# Delete a part by ID
+DELETE /parts/:id         controller.PartController.delete(id: Long)

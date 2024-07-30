@@ -25,11 +25,11 @@ class PartServiceImpl @Inject()(sqlSessionFactory: SqlSessionFactory, partMapper
 
   override def create(part: Part, partDetail: Seq[PartDetail]): Unit = withSession { session =>
     partMapper.insertPart(part)
-    
+
     partDetail.map {
-      pd => PartDetail.withPartId(pd,Some(part.id.get))
+      pd => PartDetail.withPartId(pd, Some(part.id.get))
     }
-    
+
     partDetailMapper.insertDetails(partDetail)
 
     session.commit()
@@ -38,31 +38,32 @@ class PartServiceImpl @Inject()(sqlSessionFactory: SqlSessionFactory, partMapper
   }
 
 
-  override def update(part: Part, partDetail: PartDetail): Unit = withSession { session =>
-     
-    if (part!=null){
-      findById(part.id.get)
+  override def update(part: Option[Part], partDetail: Option[PartDetail]): Unit = withSession { session =>
 
-      if (part.price != null || part.name != null || part.price != null) {
-        partMapper.updatePart(part)
 
-        logger.info(s"Updated part $part")
-      }
+    part match {
+      case Some(p) =>
+        findById(p.id.get)
 
-    } 
-    
-    if(partDetail!=null) {
-      val detail = partDetailMapper.selectPartDetailById(partDetail.id.get)
-      if (detail==null){
-        throw new PartDetailNotFoundException()
-      }
+        partMapper.updatePart(p)
+        logger.info(s"Updated part ${p}")
 
-      if (partDetail.description != null) {
-        partDetailMapper.updateDetailDescription(partDetail.description)
-        logger.info(s"Updated detail $partDetail for part $part")
-      }
-
+      case None =>
+        logger.info("No Part to Update")
     }
+
+    partDetail match
+      case Some(pd) =>
+        val detail = partDetailMapper.selectPartDetailById(pd.id.get)
+        if (detail == null) {
+          throw new PartDetailNotFoundException()
+        }
+        partDetailMapper.updateDetailDescription(partDetail.get.description)
+        logger.info(s"Updated detail $pd")
+
+      case None =>
+        logger.info("No Part Detail to Update")
+
     session.commit()
   }
 
@@ -79,14 +80,13 @@ class PartServiceImpl @Inject()(sqlSessionFactory: SqlSessionFactory, partMapper
   }
 
   override def findPartDetails(id: Long, offset: Int, limit: Int): Seq[PartDetail] = {
-    partDetailMapper.selectPartWithDetails(id,offset, limit)
+    partDetailMapper.selectPartWithDetails(id, offset, limit)
   }
 
   override def delete(id: Long): Unit = {
     findById(id)
     partMapper.deletePart(id)
   }
-
 
 
   private def findPart[T](criteria: T => Part, criterion: T, errorMessage: String): Part = withSession { * =>

@@ -96,7 +96,7 @@ class PartServiceTest extends PlaySpec with MockitoSugar with BeforeAndAfterEach
       when(partMapper.selectPartById(part.id.get)).thenReturn(part)
       when(detailMapper.selectPartDetailById(partDetail.id.get)).thenReturn(partDetail)
 
-      partService.update(part, partDetail)
+      partService.update(Some(part), Some(partDetail))
 
       verify(partMapper).updatePart(part)
       verify(detailMapper).updateDetailDescription(partDetail.description)
@@ -108,7 +108,7 @@ class PartServiceTest extends PlaySpec with MockitoSugar with BeforeAndAfterEach
 
       when(partMapper.selectPartById(part.id.get)).thenReturn(part)
 
-      partService.update(part, null)
+      partService.update(Some(part), None)
 
       verify(partMapper).updatePart(part)
       verify(sqlSession).commit()
@@ -119,7 +119,7 @@ class PartServiceTest extends PlaySpec with MockitoSugar with BeforeAndAfterEach
 
       when(detailMapper.selectPartDetailById(partDetail.partId.get)).thenReturn(partDetail)
 
-      partService.update(null, partDetail)
+      partService.update(None, Some(partDetail))
 
       verify(detailMapper).updateDetailDescription(partDetail.description)
     }
@@ -129,7 +129,7 @@ class PartServiceTest extends PlaySpec with MockitoSugar with BeforeAndAfterEach
       when(detailMapper.selectPartDetailById(1L)).thenReturn(null)
 
       val exception = intercept[PartDetailNotFoundException] {
-        partService.update(null, partDetail)
+        partService.update(None, Some(partDetail))
       }
 
       exception.getMessage shouldEqual "Part detail not found"

@@ -16,7 +16,7 @@ trait PartMapper {
   @Select(Array("SELECT * FROM PART WHERE NAME = #{name}"))
   def selectPartByName(@Param("name") name: String): Part
 
-  @Update(Array("UPDATE PART SET NAME = #{name}, QUANTITY = #{quantity}, PRICE = #{price} WHERE ID = #{id}"))
+  @Update(Array("UPDATE PART SET NAME = COALESCE(#{name}, NAME), QUANTITY = COALESCE(#{quantity},QUANTITY), PRICE = COALESCE(#{price},PRICE) WHERE ID = #{id}"))
   def updatePart(part: Part): Unit
 
   @Delete(Array("DELETE FROM PART WHERE ID = #{id}"))

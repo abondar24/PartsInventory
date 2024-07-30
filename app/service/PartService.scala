@@ -14,7 +14,7 @@ trait PartService {
 
   def findPartDetails(id: Long, offset: Int, limit: Int): Seq[PartDetail]
   
-  def update(part: Part,partDetail: PartDetail): Unit
+  def update(part: Option[Part],partDetail: Option[PartDetail]): Unit
   
   def delete(id: Long): Unit
 }
