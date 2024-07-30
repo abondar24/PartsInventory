@@ -1,6 +1,7 @@
-package dao
+package service
 
-import exception.PartNotFoundException
+import dao.{PartDetailMapper, PartMapper}
+import exception.{PartDetailNotFoundException, PartNotFoundException}
 import model.{Part, PartDetail}
 import org.apache.ibatis.session.{SqlSession, SqlSessionFactory}
 import org.mockito.Mockito.{reset, verify, when}
@@ -8,7 +9,6 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers.shouldEqual
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
-import service.PartServiceImpl
 
 class PartServiceTest extends PlaySpec with MockitoSugar with BeforeAndAfterEach{
 
@@ -91,9 +91,10 @@ class PartServiceTest extends PlaySpec with MockitoSugar with BeforeAndAfterEach
 
     "update part with detail" in {
       val part = Part(Some(1), "PartName", 10, 100.0)
-      val partDetail = PartDetail(None, Some(1), "Test")
+      val partDetail = PartDetail(Some(1), Some(1), "Test")
 
       when(partMapper.selectPartById(part.id.get)).thenReturn(part)
+      when(detailMapper.selectPartDetailById(partDetail.id.get)).thenReturn(partDetail)
 
       partService.update(part, partDetail)
 
@@ -114,14 +115,25 @@ class PartServiceTest extends PlaySpec with MockitoSugar with BeforeAndAfterEach
     }
 
     "update  detail without part" in {
-      val part = Part(Some(1), "PartName", 10, 100.0)
-      val partDetail = PartDetail(None, Some(1), "Test")
+      val partDetail = PartDetail(Some(1), Some(1), "Test")
 
-      when(partMapper.selectPartById(partDetail.partId.get)).thenReturn(part)
+      when(detailMapper.selectPartDetailById(partDetail.partId.get)).thenReturn(partDetail)
 
       partService.update(null, partDetail)
 
       verify(detailMapper).updateDetailDescription(partDetail.description)
+    }
+
+    "should throw exception when part detail not found" in {
+      val partDetail = PartDetail(Some(1), Some(1), "Test")
+      when(detailMapper.selectPartDetailById(1L)).thenReturn(null)
+
+      val exception = intercept[PartDetailNotFoundException] {
+        partService.update(null, partDetail)
+      }
+
+      exception.getMessage shouldEqual "Part detail not found"
+
     }
 
     "delete detail" in {

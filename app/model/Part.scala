@@ -9,6 +9,3 @@ case class Part(
                price: BigDecimal
                )
 
-object Part {
-  implicit val partFormat: OFormat[Part] = Json.format[Part]
-}

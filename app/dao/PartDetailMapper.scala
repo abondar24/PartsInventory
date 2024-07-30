@@ -20,5 +20,8 @@ trait PartDetailMapper {
 
   @Select(Array("SELECT DESCRIPTION FROM PART_DETAILS WHERE PART_ID=#{partId} OFFSET #{offset}, LIMIT #{limit}"))
   def selectPartWithDetails(@Param("partId") partId: Long, @Param("offset") offset: Int, @Param("limit") limit: Int): List[PartDetail]
+
+  @Select(Array("SELECT * FROM PART_DETAILS WHERE ID = #{id}"))
+  def selectPartDetailById(@Param("id") id: Long): PartDetail
   
 }

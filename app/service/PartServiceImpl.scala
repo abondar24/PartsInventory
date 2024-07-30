@@ -2,7 +2,7 @@ package service
 
 import com.google.inject.{Inject, Singleton}
 import dao.{PartDetailMapper, PartMapper}
-import exception.PartNotFoundException
+import exception.{PartDetailNotFoundException, PartNotFoundException}
 import model.{Part, PartDetail}
 import org.apache.ibatis.session.{SqlSession, SqlSessionFactory}
 import org.slf4j.LoggerFactory
@@ -52,7 +52,10 @@ class PartServiceImpl @Inject()(sqlSessionFactory: SqlSessionFactory, partMapper
     } 
     
     if(partDetail!=null) {
-      findById(partDetail.partId.get)
+      val detail = partDetailMapper.selectPartDetailById(partDetail.id.get)
+      if (detail==null){
+        throw new PartDetailNotFoundException()
+      }
 
       if (partDetail.description != null) {
         partDetailMapper.updateDetailDescription(partDetail.description)
