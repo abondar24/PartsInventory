@@ -1,12 +1,17 @@
 import com.google.inject.{AbstractModule, Provides, Singleton}
 import config.MyBatisConfig
+import controller.PartController
 import dao.{PartDetailMapper, PartMapper}
+import exception.PartExceptionHandler
 import org.apache.ibatis.session.SqlSessionFactory
+import play.api.http.HttpErrorHandler
 import service.{PartService, PartServiceImpl}
 
 class Module extends AbstractModule{
   override def configure(): Unit = {
     bind(classOf[PartService]).to(classOf[PartServiceImpl]).in(classOf[Singleton])
+    bind(classOf[PartController]).in(classOf[Singleton])
+    bind(classOf[HttpErrorHandler]).to(classOf[PartExceptionHandler]).in(classOf[Singleton])
   }
 
   @Provides
