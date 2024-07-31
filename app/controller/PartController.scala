@@ -1,7 +1,6 @@
 package controller
 
 import com.google.inject.{Inject, Singleton}
-import exception.PartNotFoundException
 import model.web.{PartCreateRequest, PartCreateResponse, PartDetailResponse, PartResponse, PartUpdateRequest}
 import model.{Part, PartDetail}
 import play.api.libs.json.{JsError, JsValue, Json}
