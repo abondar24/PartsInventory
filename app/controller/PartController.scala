@@ -36,7 +36,7 @@ class PartController @Inject()(components: ControllerComponents, partService: Pa
 
         Future {
           partService.create(part, partDetails)
-          val partId = part.id.getOrElse(throw new RuntimeException("Failed to get generated part ID"))
+          val partId = part.id.getOrElse(-1L)
           val detailIds = partDetails.map(_.id.getOrElse(-1L)) // Here, IDs need to be gathered if generated
 
           val response = PartCreateResponse(partId, detailIds)
@@ -139,15 +139,8 @@ class PartController @Inject()(components: ControllerComponents, partService: Pa
 
   def delete(id: Long): Action[AnyContent] = Action.async {
     Future {
-      try {
-        partService.delete(id)
-        Ok(Json.obj("status" -> "Deleted successfully"))
-      } catch {
-        case _: PartNotFoundException =>
-          NotFound(Json.obj("error" -> s"No part found"))
-        case ex: Exception =>
-          InternalServerError(Json.obj("error" -> ex.getMessage))
-      }
+      partService.delete(id)
+      Ok(Json.obj("status" -> "Deleted successfully"))
     }
   }
 
@@ -155,9 +148,9 @@ class PartController @Inject()(components: ControllerComponents, partService: Pa
   private def processPaginationParams(request: Request[AnyContent])(handler: (Int, Int) => Future[Result]): Future[Result] = {
     val offsetOpt = request.getQueryString("offset").flatMap(s => scala.util.Try(s.toInt).toOption)
     val limitOpt = request.getQueryString("limit").flatMap(s => scala.util.Try(s.toInt).toOption)
-
+    
     (offsetOpt, limitOpt) match {
-      case (Some(offset), Some(limit)) if offset > 0 && limit > 0 =>
+      case (Some(offset), Some(limit)) if offset >= 0 && limit >= 0 =>
         handler(offset, limit)
       case _ =>
         Future.successful(BadRequest(Json.obj("error" -> "Invalid or missing query parameters")))
