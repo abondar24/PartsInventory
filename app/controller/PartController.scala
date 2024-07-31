@@ -97,30 +97,29 @@ class PartController @Inject()(components: ControllerComponents, partService: Pa
       errors => Future.successful(BadRequest(Json.obj("error" -> JsError.toJson(errors)))),
       updateRequest => {
         val partUpdate = {
-
           if (updateRequest.name.isDefined || updateRequest.quantity.isDefined || updateRequest.price.isDefined) {
-            Some(Part(
-              id = Some(id),
-              name =  updateRequest.name.get,
-              quantity = updateRequest.quantity.get,
-              price = updateRequest.price.get
-            ))
+            val partBuilder = Part.builder.withId(Some(id))
+
+            // Use updateRequest to set values if they are defined
+            updateRequest.name.foreach(partBuilder.withName)
+            updateRequest.quantity.foreach(partBuilder.withQuantity)
+            updateRequest.price.foreach(partBuilder.withPrice)
+
+            Some(partBuilder.build())
           } else {
             None
           }
         }
 
-        val partDetailUpdate  = {
-          if (updateRequest.partDetail.isDefined){
-            if (updateRequest.partDetail.get.detailDescription.isDefined){
-              Some(PartDetail(
-                id = None,
-                partId =  Some(id),
-                description = updateRequest.partDetail.get.detailDescription.get
-              ))
-            } else {
-              None
-            }
+        val partDetailUpdate = {
+          if (updateRequest.partDetail.isDefined) {
+            val partDetailBuilder = PartDetail.builder.withPartId(Some(id))
+
+            // Set description if it is defined
+            updateRequest.partDetail.flatMap(_.detailDescription).foreach(partDetailBuilder.withDescription)
+
+            // Build the PartDetail object
+            Some(partDetailBuilder.build())
           } else {
             None
           }

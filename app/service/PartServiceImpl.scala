@@ -27,7 +27,7 @@ class PartServiceImpl @Inject()(sqlSessionFactory: SqlSessionFactory, partMapper
     partMapper.insertPart(part)
 
     partDetail.map {
-      pd => PartDetail.withPartId(pd, Some(part.id.get))
+      pd => PartDetail.builder.withPartId(pd.id).build()
     }
 
     partDetailMapper.insertDetails(partDetail)
