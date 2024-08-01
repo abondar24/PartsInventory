@@ -10,7 +10,7 @@ import play.api.mvc.{RequestHeader, Result}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class PartExceptionHandler @Inject()(implicit ex: ExecutionContext) extends HttpErrorHandler{
+class PartExceptionHandler @Inject() extends HttpErrorHandler{
 
   def onClientError(request: RequestHeader, statusCode: Int, message: String): Future[Result] = {
     statusCode match {

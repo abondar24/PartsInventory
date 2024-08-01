@@ -30,7 +30,7 @@ class PartControllerTest extends PlaySpec with MockitoSugar with BeforeAndAfterE
 
   private val partController = new PartController(controllerComponents, partService)(ec)
 
-  private val partExceptionHandler = new PartExceptionHandler()(ec)
+  private val partExceptionHandler = new PartExceptionHandler()
 
 
   // Reset mocks before each test

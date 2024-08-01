@@ -25,3 +25,10 @@ sbt stage
 ```
 
 Access: localhost:9000
+
+### Notes
+- Check routes file for API description
+- NO SWAGGER for Scala 3.4.2 - ridiculous
+- The project has some weird issues on startup
+- Play framework is just awful
+
